@@ -62,9 +62,15 @@ extern "C" {
  * with other thread or to ensure mutual exclusive access to...*/
 
 /* Declare a variable of type TaskHandle_t. This is used to reference threads. */
-extern TaskHandle_t h_task_a;
-extern TaskHandle_t h_task_b;
-extern TaskHandle_t h_task_c;
+// A handler
+extern TaskHandle_t h_task_a_btn;
+extern TaskHandle_t h_task_a_led;
+// B handler
+extern TaskHandle_t h_task_b_btn;
+extern TaskHandle_t h_task_b_led;
+// C handler
+extern TaskHandle_t h_task_c_btn;
+extern TaskHandle_t h_task_c_led;
 
 /********************** external functions declaration ***********************/
 void app_init(void);

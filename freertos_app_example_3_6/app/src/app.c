@@ -67,9 +67,15 @@ const char *p_app	= " freertos_app_example_3_6: Demo Code\r\n";
  * with other thread or to ensure mutual exclusive access to...*/
 
 /* Declare a variable of type TaskHandle_t. This is used to reference threads. */
-TaskHandle_t h_task_a;
-TaskHandle_t h_task_b;
-TaskHandle_t h_task_c;
+// A handler
+TaskHandle_t h_task_a_btn;
+TaskHandle_t h_task_a_led;
+// B handler
+TaskHandle_t h_task_b_btn;
+TaskHandle_t h_task_b_led;
+// C handler
+TaskHandle_t h_task_c_btn;
+TaskHandle_t h_task_c_led;
 
 /********************** external functions definition ************************/
 void app_init(void)
@@ -95,36 +101,66 @@ void app_init(void)
 
     p_ldx_btn_config = &ldx_btn_config[0];
     /* Task A thread at priority 1 */
-    ret = xTaskCreate(task_function,					/* Pointer to the function thats implement the task. */
-					  "Task A",							/* Text name for the task. This is to facilitate debugging only. */
+    ret = xTaskCreate(task_button,					/* Pointer to the function thats implement the task. */
+					  "Task A button",							/* Text name for the task. This is to facilitate debugging only. */
 					  (2 * configMINIMAL_STACK_SIZE),	/* Stack depth in words. */
 					  (void *)p_ldx_btn_config,   		/* Pass the pointer as the task parameter. */
 					  (tskIDLE_PRIORITY + 1ul),			/* This task will run at priority 1. */
-					  &h_task_a);						/* We are using a variable as task handle. */
+					  &h_task_a_btn);						/* We are using a variable as task handle. */
+
+    /* Check the thread was created successfully. */
+    configASSERT(pdPASS == ret);
+
+    ret = xTaskCreate(task_led,					/* Pointer to the function thats implement the task. */
+					  "Task A led",							/* Text name for the task. This is to facilitate debugging only. */
+					  (2 * configMINIMAL_STACK_SIZE),	/* Stack depth in words. */
+					  (void *)p_ldx_btn_config,   		/* Pass the pointer as the task parameter. */
+					  (tskIDLE_PRIORITY + 1ul),			/* This task will run at priority 1. */
+					  &h_task_a_led);						/* We are using a variable as task handle. */
 
     /* Check the thread was created successfully. */
     configASSERT(pdPASS == ret);
 
     p_ldx_btn_config = &ldx_btn_config[1];
     /* Task B thread at priority 1 */
-    ret = xTaskCreate(task_function,					/* Pointer to the function thats implement the task. */
-					  "Task B",							/* Text name for the task. This is to facilitate debugging only. */
+    ret = xTaskCreate(task_button,					/* Pointer to the function thats implement the task. */
+					  "Task B button",							/* Text name for the task. This is to facilitate debugging only. */
 					  (2 * configMINIMAL_STACK_SIZE),	/* Stack depth in words. */
 					  (void *)p_ldx_btn_config,    		/* Pass the pointer as the task parameter. */
 					  (tskIDLE_PRIORITY + 1ul),			/* This task will run at priority 1. */
-					  &h_task_b);						/* We are using a variable as task handle. */
+					  &h_task_b_btn);						/* We are using a variable as task handle. */
+
+    /* Check the thread was created successfully. */
+    configASSERT(pdPASS == ret);
+
+    ret = xTaskCreate(task_led,					/* Pointer to the function thats implement the task. */
+					  "Task B led",							/* Text name for the task. This is to facilitate debugging only. */
+					  (2 * configMINIMAL_STACK_SIZE),	/* Stack depth in words. */
+					  (void *)p_ldx_btn_config,    		/* Pass the pointer as the task parameter. */
+					  (tskIDLE_PRIORITY + 1ul),			/* This task will run at priority 1. */
+					  &h_task_b_led);						/* We are using a variable as task handle. */
 
     /* Check the thread was created successfully. */
     configASSERT(pdPASS == ret);
 
     p_ldx_btn_config = &ldx_btn_config[2];
     /* Task C thread at priority 1 */
-    ret = xTaskCreate(task_function,					/* Pointer to the function thats implement the task. */
-					  "Task C",							/* Text name for the task. This is to facilitate debugging only. */
+    ret = xTaskCreate(task_button,					/* Pointer to the function thats implement the task. */
+					  "Task C button",							/* Text name for the task. This is to facilitate debugging only. */
 					  (2 * configMINIMAL_STACK_SIZE),	/* Stack depth in words. */
 					  (void *)p_ldx_btn_config,    		/* Pass the pointer as the task parameter. */
 					  (tskIDLE_PRIORITY + 1ul),			/* This task will run at priority 1. */
-					  &h_task_c);						/* We are using a variable as task handle. */
+					  &h_task_c_btn);						/* We are using a variable as task handle. */
+
+    /* Check the thread was created successfully. */
+    configASSERT(pdPASS == ret);
+
+    ret = xTaskCreate(task_led,					/* Pointer to the function thats implement the task. */
+					  "Task C led",							/* Text name for the task. This is to facilitate debugging only. */
+					  (2 * configMINIMAL_STACK_SIZE),	/* Stack depth in words. */
+					  (void *)p_ldx_btn_config,    		/* Pass the pointer as the task parameter. */
+					  (tskIDLE_PRIORITY + 1ul),			/* This task will run at priority 1. */
+					  &h_task_c_led);						/* We are using a variable as task handle. */
 
     /* Check the thread was created successfully. */
     configASSERT(pdPASS == ret);

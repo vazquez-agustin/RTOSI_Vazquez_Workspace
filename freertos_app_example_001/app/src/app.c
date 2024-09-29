@@ -97,6 +97,8 @@ void app_init(void)
 	vSemaphoreCreateBinary(h_entry_a_bin_sem);
 	vSemaphoreCreateBinary(h_exit_a_bin_sem);
 
+	// NOTE: When semaphore is created with "vSemaphoreCreateBinary", it starts taken (green)
+	// but when is created with "xSemaphoreCreateBinary", it starts in red.
 	vSemaphoreCreateBinary(h_entry_b_bin_sem);
 	vSemaphoreCreateBinary(h_exit_b_bin_sem);
 

@@ -56,7 +56,9 @@ extern "C" {
 
 /********************** external data declaration ****************************/
 /* Declare a variable of type QueueHandle_t. This is used to reference queues*/
-
+extern QueueHandle_t h_queue_a;
+extern QueueHandle_t h_queue_b;
+extern QueueHandle_t h_queue_c;
 /* Declare a variable of type xSemaphoreHandle (binary or counting) or mutex. 
  * This is used to reference the semaphore that is used to synchronize a thread
  * with other thread or to ensure mutual exclusive access to...*/

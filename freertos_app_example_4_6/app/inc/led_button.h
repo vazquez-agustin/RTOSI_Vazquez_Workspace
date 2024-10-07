@@ -48,23 +48,36 @@ extern "C" {
 /********************** macros ***********************************************/
 
 /********************** typedef **********************************************/
-typedef enum {BLINKING, NOT_BLINKING} led_flag_t;
-typedef enum {PRESSED,  NOT_PRESSED}  btn_flag_t;
+typedef enum {
+    BLINKING,
+    NOT_BLINKING
+} led_flag_t;
+
+typedef enum {
+    PRESSED,
+    NOT_PRESSED
+}  btn_flag_t;
 
 typedef struct
 {
-	GPIO_TypeDef *	led_gpio_port;
-	uint16_t		led_pin;
-	GPIO_PinState	led_state;
-	led_flag_t		led_flag;
+	GPIO_TypeDef *  led_gpio_port;
+	uint16_t        led_pin;
+	GPIO_PinState   led_state;
+	QueueHandle_t   q_handle;
 
-	GPIO_TypeDef *	btn_gpio_port;
-	uint16_t		btn_pin;
-	GPIO_PinState	btn_state;
-	btn_flag_t		btn_flag;
-} led_btn_config_t;
+} led_config_t;
 
-extern led_btn_config_t led_btn_config[];
+typedef struct
+{
+	GPIO_TypeDef *  btn_gpio_port;
+	uint16_t        btn_pin;
+	GPIO_PinState   btn_state;
+	QueueHandle_t   q_handle;
+
+} btn_config_t;
+
+extern led_config_t led_config[];
+extern btn_config_t btn_config[];
 
 /********************** external data declaration ****************************/
 

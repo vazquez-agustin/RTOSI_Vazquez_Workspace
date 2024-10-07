@@ -61,7 +61,9 @@ const char *p_app	= " freertos_app_example_4_6: Demo Code\r\n";
 
 /********************** external data declaration *****************************/
 /* Declare a variable of type QueueHandle_t. This is used to reference queues*/
-
+QueueHandle_t h_queue_a;
+QueueHandle_t h_queue_b;
+QueueHandle_t h_queue_c;
 /* Declare a variable of type xSemaphoreHandle (binary or counting) or mutex. 
  * This is used to reference the semaphore that is used to synchronize a thread
  * with other thread or to ensure mutual exclusive access to...*/
@@ -86,22 +88,38 @@ void app_init(void)
 
     /* Before a queue or semaphore (binary or counting) or mutex is used it must 
      * be explicitly created */
+	h_queue_a = xQueueCreate(2, sizeof(led_flag_t));
+	h_queue_b = xQueueCreate(2, sizeof(led_flag_t));
+	h_queue_c = xQueueCreate(2, sizeof(led_flag_t));
 
     /* Check the queue or semaphore (binary or counting) or mutex was created 
      * successfully. */
+	configASSERT(h_queue_a != NULL);
+	configASSERT(h_queue_b != NULL);
+	configASSERT(h_queue_c != NULL);
 
     /* Add queue or semaphore (binary or counting) or mutex to registry. */
+	vQueueAddToRegistry(h_queue_a, "A Queue Handle");
+	vQueueAddToRegistry(h_queue_b, "B Queue Handle");
+	vQueueAddToRegistry(h_queue_c, "C Queue Handle");
 
 	/* Add threads, ... */
-	led_btn_config_t *p_led_btn_config;
+	led_config_t *p_led_config;
+	btn_config_t *p_btn_config;
     BaseType_t ret;
 
-    p_led_btn_config = &led_btn_config[0];
+    p_led_config = &led_config[0];
+    p_btn_config = &btn_config[0];
+    //led_config[0].q_handle = h_queue_a;
+    p_led_config->q_handle = h_queue_a;
+    p_btn_config->q_handle = h_queue_a;
+
     /* Task A thread at priority 1 */
     ret = xTaskCreate(task_led,							/* Pointer to the function thats implement the task. */
 					  "Task A",							/* Text name for the task. This is to facilitate debugging only. */
 					  (2 * configMINIMAL_STACK_SIZE),	/* Stack depth in words. */
-					  (void *)p_led_btn_config,   		/* Pass the pointer as the task parameter. */
+					  (void *)p_led_config,             /* Pass the pointer as the task parameter. */
+					  //(void *)&led_config[0],         // OTRA FORMA DE HACERLO
 					  (tskIDLE_PRIORITY + 1ul),			/* This task will run at priority 1. */
 					  &h_task_a);						/* We are using a variable as task handle. */
 
@@ -112,19 +130,24 @@ void app_init(void)
     ret = xTaskCreate(task_btn,							/* Pointer to the function thats implement the task. */
 					  "Task AA",						/* Text name for the task. This is to facilitate debugging only. */
 					  (2 * configMINIMAL_STACK_SIZE),	/* Stack depth in words. */
-					  (void *)p_led_btn_config,   		/* Pass the pointer as the task parameter. */
+					  (void *)p_btn_config,   		    /* Pass the pointer as the task parameter. */
 					  (tskIDLE_PRIORITY + 1ul),			/* This task will run at priority 1. */
 					  &h_task_aa);						/* We are using a variable as task handle. */
 
     /* Check the thread was created successfully. */
     configASSERT(pdPASS == ret);
 
-    p_led_btn_config = &led_btn_config[1];
+    p_led_config = &led_config[1];
+    p_btn_config = &btn_config[1];
+
+    p_led_config->q_handle = h_queue_b;
+    p_btn_config->q_handle = h_queue_b;
+
     /* Task B thread at priority 1 */
     ret = xTaskCreate(task_led,							/* Pointer to the function thats implement the task. */
 					  "Task B",							/* Text name for the task. This is to facilitate debugging only. */
 					  (2 * configMINIMAL_STACK_SIZE),	/* Stack depth in words. */
-					  (void *)p_led_btn_config,    		/* Pass the pointer as the task parameter. */
+					  (void *)p_led_config,    		/* Pass the pointer as the task parameter. */
 					  (tskIDLE_PRIORITY + 1ul),			/* This task will run at priority 1. */
 					  &h_task_b);						/* We are using a variable as task handle. */
 
@@ -135,19 +158,23 @@ void app_init(void)
     ret = xTaskCreate(task_btn,							/* Pointer to the function thats implement the task. */
 					  "Task BB",						/* Text name for the task. This is to facilitate debugging only. */
 					  (2 * configMINIMAL_STACK_SIZE),	/* Stack depth in words. */
-					  (void *)p_led_btn_config,    		/* Pass the pointer as the task parameter. */
+					  (void *)p_btn_config,    		/* Pass the pointer as the task parameter. */
 					  (tskIDLE_PRIORITY + 1ul),			/* This task will run at priority 1. */
 					  &h_task_bb);						/* We are using a variable as task handle. */
 
     /* Check the thread was created successfully. */
     configASSERT(pdPASS == ret);
 
-    p_led_btn_config = &led_btn_config[2];
+    p_led_config = &led_config[2];
+    p_btn_config = &btn_config[2];
+
+    p_led_config->q_handle = h_queue_c;
+    p_btn_config->q_handle = h_queue_c;
     /* Task C thread at priority 1 */
     ret = xTaskCreate(task_led,							/* Pointer to the function thats implement the task. */
 					  "Task C",							/* Text name for the task. This is to facilitate debugging only. */
 					  (2 * configMINIMAL_STACK_SIZE),	/* Stack depth in words. */
-					  (void *)p_led_btn_config,    		/* Pass the pointer as the task parameter. */
+					  (void *)p_led_config,    		/* Pass the pointer as the task parameter. */
 					  (tskIDLE_PRIORITY + 1ul),			/* This task will run at priority 1. */
 					  &h_task_c);						/* We are using a variable as task handle. */
 
@@ -158,7 +185,7 @@ void app_init(void)
     ret = xTaskCreate(task_btn,							/* Pointer to the function thats implement the task. */
 					  "Task CC",						/* Text name for the task. This is to facilitate debugging only. */
 					  (2 * configMINIMAL_STACK_SIZE),	/* Stack depth in words. */
-					  (void *)p_led_btn_config,    		/* Pass the pointer as the task parameter. */
+					  (void *)p_btn_config,    		/* Pass the pointer as the task parameter. */
 					  (tskIDLE_PRIORITY + 1ul),			/* This task will run at priority 1. */
 					  &h_task_cc);						/* We are using a variable as task handle. */
 
